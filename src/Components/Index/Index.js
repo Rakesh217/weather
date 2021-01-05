@@ -4,9 +4,9 @@ import About from "./About";
 export default class Index extends Component {
   state = {
     cityName: "",
-    data: [],
-    filterData: [],
-    vari: "",
+    data: null,
+    error: "",
+    link: "",
   };
   handleOnChange = (e) => {
     e.preventDefault();
@@ -14,46 +14,20 @@ export default class Index extends Component {
   };
   handleOnSubmit = (e) => {
     e.preventDefault();
-    this.setState({ vari: this.state.cityName });
-    let myHeader = new Headers();
-    let query = {
-      query: `query{
-        getCityByName(name: "${this.state.cityName}"){
-          name
-          weather{
-            temperature{
-              actual
-              min
-              max
-            }
-            wind{
-              speed
-            }
-            summary{
-              title
-            }
-          }
-        }
-      }`,
-    };
-    myHeader.append("Content-Type", "application/json");
-    fetch("https://graphql-weather-api.herokuapp.com/", {
-      method: "POST",
-      body: JSON.stringify(query),
-      headers: myHeader,
-    })
-      .then((result) => result.json())
-      .then((result1) => {
-        console.log("Result", result1.data);
-        if (result1.data.getCityByName === null) this.setState({ data: null });
-        this.setState({ data: [{ ...result1.data.getCityByName }] });
-      })
-      .catch((error) => console.log(error));
-    console.log("Submit", this.state.data);
+    this.props.receive(this.state.cityName);
   };
 
   componentDidMount() {}
-  componentDidUpdate(prevProps, prevState) {}
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.data !== this.state.data && this.props.data.length > 0) {
+      if (this.props.data[0].error !== this.state.error) {
+        this.setState({ error: this.props.data[0].error });
+        return;
+      }
+      if (!this.props.data[0].hasOwnProperty("error"))
+        this.setState({ data: this.props.data, error: "" });
+    }
+  }
   render() {
     console.log("Render", this.state.data);
     return (
@@ -84,18 +58,12 @@ export default class Index extends Component {
             Search
           </button>
         </form>
-        {this.state.data.length > 0 ? (
+        {this.state.data !== null && this.state.error === "" ? (
           <div>
             <div
-              className="card hover-overlay ripple"
-              data-mdb-ripple-color="dark"
-              style={{ width: "18rem", marginLeft: "23%" }}
+              className="card mb-4 animation flip"
+              style={{ width: "25rem", marginLeft: "15%" }}
             >
-              <img
-                src="https://mdbootstrap.com/img/new/standard/city/062.jpg"
-                className="card-img-top"
-                alt="..."
-              />
               <div className="card-body">
                 <h5 className="card-title">{this.state.data[0].name}</h5>
                 <p className="card-text">
@@ -109,7 +77,7 @@ export default class Index extends Component {
               </div>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
-                  Temperature:{" "}
+                  Temperature:{"  "}
                   {(
                     (this.state.data[0].weather.temperature.actual - 273.15) *
                       (9 / 5) +
@@ -118,7 +86,7 @@ export default class Index extends Component {
                   F
                 </li>
                 <li className="list-group-item">
-                  Today's Highest:{" "}
+                  Today's Highest:{"  "}
                   {(
                     (this.state.data[0].weather.temperature.max - 273.15) *
                       (9 / 5) +
@@ -127,7 +95,7 @@ export default class Index extends Component {
                   F
                 </li>
                 <li className="list-group-item">
-                  Today's Lowest:{" "}
+                  Today's Lowest:{"  "}
                   {(
                     (this.state.data[0].weather.temperature.min - 273.15) *
                       (9 / 5) +
@@ -139,8 +107,14 @@ export default class Index extends Component {
             </div>
           </div>
         ) : (
-          "No city Found"
+          ""
         )}
+        {this.state.error ? (
+          <div className="alert alert-dismissible alert-warning">
+            <h4 className="alert-heading">Warning!</h4>
+            <p className="mb-0">No City Name Found.</p>
+          </div>
+        ) : null}
       </div>
     );
   }

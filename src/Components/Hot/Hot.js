@@ -5,6 +5,9 @@ export default function Hot(props) {
   const [State, setState] = useState({
     data: [],
   });
+  let handleOnClick = (value) => {
+    props.receive(value.Name);
+  };
   useEffect(() => {
     setState({ data: props.hotData });
   }, [props]);
@@ -16,7 +19,7 @@ export default function Hot(props) {
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Temp</th>
+            <th scope="col">State</th>
           </tr>
         </thead>
       </table>
@@ -25,10 +28,10 @@ export default function Hot(props) {
             <div>
               <table class="table table-striped">
                 <tbody>
-                  <tr>
+                  <tr onClick={() => handleOnClick(value)}>
                     <th scope="row">{index + 1}</th>
                     <td>{value.Name}</td>
-                    <td>{value.Temp}</td>
+                    <td>{value.State}</td>
                   </tr>
                 </tbody>
               </table>

@@ -4,6 +4,9 @@ export default class Cold extends Component {
   state = {
     data: [],
   };
+  handleOnClick = (value) => {
+    this.props.receive(value.Name);
+  };
   componentDidMount() {
     this.setState({ data: this.props.coldData });
   }
@@ -20,18 +23,21 @@ export default class Cold extends Component {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
-              <th scope="col">Temp</th>
+              <th scope="col">State</th>
             </tr>
           </thead>
         </table>
         {this.state.data.length > 0
           ? this.state.data.map((value, index) => (
-              <table class="table table-striped">
+              <table
+                class="table table-striped"
+                style={{ background: "42f5e9" }}
+              >
                 <tbody>
-                  <tr>
+                  <tr onClick={() => this.handleOnClick(value)}>
                     <th scope="row">{index + 1}</th>
                     <td>{value.Name}</td>
-                    <td>{value.Temp}</td>
+                    <td>{value.State}</td>
                   </tr>
                 </tbody>
               </table>

@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 export default class Footer extends Component {
   render() {
     return (
-      <div className="down">
+      <div className="footer-copyright py-3 text-center down">
         <footer className="bg-light text-center text-lg-start">
           <div
             className="text-center p-3"
             style={{ "background-color": "rgba(0, 0, 0, 0.2)" }}
           >
-            © 2020 Copyright:
+            © 2021 Copyright:
             <Link class="text-dark" to="/">
               WTFWeather.com
             </Link>

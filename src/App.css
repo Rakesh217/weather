@@ -4,12 +4,35 @@
 
 .div-top1 {
   margin-top: 10%;
+  width: 100%;
+  height: 100%;
+  background-image: url("http://ccimgs-2017.s3.amazonaws.com/2017FirstFrost/2017FirstFrost_LoopableBackground.mp4");
 }
 
 .div-top2 {
   margin-top: 45%;
+  background-color: white;
 }
 
 .down {
   margin-bottom: 0ch;
+}
+
+#backVideo {
+  position: fixed;
+  z-index: -1;
+}
+@media (min-aspect-ratio: 16/9) {
+  #backVideo {
+    width: 100%;
+    height: auto;
+  }
+}
+@media (max-width: 767px) {
+  #backVideo {
+    display: none;
+  }
+  body {
+    background: url("poster.png");
+  }
 }
