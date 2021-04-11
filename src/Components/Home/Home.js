@@ -5,7 +5,7 @@ import Hot from "../Hot/Hot";
 import "./style.css";
 import { Container, Row, Col } from "react-bootstrap";
 
-export default function Home() {
+export default function Home(props) {
   const [Data, setData] = useState([]);
   const [Dummy, setDummy] = useState([
     {
@@ -63,6 +63,7 @@ export default function Home() {
   const [coldData, setcoldData] = useState([]);
   const [Name, setName] = useState("");
   const [temp, settemp] = useState(0);
+  const [unitName, setunitName] = useState("");
   const [link, setlink] = useState(
     "http://ccimgs-2017.s3.amazonaws.com/2017WinterTrends/2017WinterTrends_LoopableBackground.mp4"
   );
@@ -124,7 +125,9 @@ export default function Home() {
               );
             } else if (
               [{ ...result1.data.getCityByName }][0].weather.summary.title ===
-              "Mist"
+                "Mist" ||
+              [{ ...result1.data.getCityByName }][0].weather.summary.title ===
+                "Rain"
             ) {
               setlink(
                 "http://ccimgs.s3.amazonaws.com/2016WinterPrecip/2016WinterPrecip_LoopableBackground_1080.mp4"
@@ -144,7 +147,8 @@ export default function Home() {
     sendHotData();
     sendColdData();
     fetchCall();
-  }, [Name]);
+    setunitName(props.send);
+  }, [Name, unitName]);
   return (
     <div className="homeBack">
       <video id="background-video" src={link} muted loop autoPlay></video>
@@ -154,7 +158,11 @@ export default function Home() {
             <Cold coldData={coldData} receive={(value) => setName(value)} />
           </Col>
           <Col lg={6}>
-            <Index receive={(value) => setName(value)} data={Data} />
+            <Index
+              receive={(value) => setName(value)}
+              data={Data}
+              uName={unitName}
+            />
           </Col>
           <Col style={{ background: "42f5e9" }}>
             <Hot hotData={hotData} receive={(value) => setName(value)} />

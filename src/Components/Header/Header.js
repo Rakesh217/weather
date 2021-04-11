@@ -3,6 +3,17 @@ import About from "../Index/About";
 import { Link } from "react-router-dom";
 
 export default class Header extends Component {
+  state = {
+    unitName: "fahrenheit",
+  };
+  handleOnChange = (e) => {
+    this.setState({ unitName: e.target.value });
+  };
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.unitName !== this.state.unitName) {
+      this.props.receive(this.state.unitName);
+    }
+  };
   render() {
     return (
       <div>

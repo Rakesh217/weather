@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import About from "./About";
-
+import md5 from "md5";
 export default class Index extends Component {
   state = {
     cityName: "",
     data: null,
     error: "",
     link: "",
+    // unit: "fahrenheit",
   };
   handleOnChange = (e) => {
     e.preventDefault();
@@ -16,7 +17,19 @@ export default class Index extends Component {
     e.preventDefault();
     this.props.receive(this.state.cityName);
   };
-
+  convertUnitToVal = (num) => {
+    switch (this.props.uName) {
+      case "fahrenheit":
+        let fahr = ((num - 273.15) * (9 / 5) + 32).toFixed(1);
+        return fahr + " F";
+      case "celsius":
+        let cel = (num - 273.15).toFixed(1);
+        return cel + " C";
+      default:
+        let val = ((num - 273.15) * (9 / 5) + 32).toFixed(1);
+        return val + " F";
+    }
+  };
   componentDidMount() {}
   componentDidUpdate(prevProps, prevState) {
     if (this.props.data !== this.state.data && this.props.data.length > 0) {
@@ -32,7 +45,7 @@ export default class Index extends Component {
     console.log("Render", this.state.data);
     return (
       <div className="div-top1">
-        <h1>What The Fahrenheit </h1>
+        <h1 style={{ color: "white" }}>What The Fahrenheit </h1>
 
         <form className="form-inline d-flex justify-content-center md-form form-sm mt-0">
           <i className="fas fa-search" aria-hidden="true"></i>
@@ -59,9 +72,9 @@ export default class Index extends Component {
           </button>
         </form>
         {this.state.data !== null && this.state.error === "" ? (
-          <div>
+          <div style={{ opacity: "0.6" }}>
             <div
-              className="card mb-4 animation flip"
+              className="card mb-4 animation zoomIn"
               style={{ width: "25rem", marginLeft: "15%" }}
             >
               <div className="card-body">
@@ -77,7 +90,7 @@ export default class Index extends Component {
               </div>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
-                  Temperature:{"  "}
+                  Temperature:{" "}
                   {(
                     (this.state.data[0].weather.temperature.actual - 273.15) *
                       (9 / 5) +
@@ -110,7 +123,10 @@ export default class Index extends Component {
           ""
         )}
         {this.state.error ? (
-          <div className="alert alert-dismissible alert-warning">
+          <div
+            className="alert alert-dismissible alert-warning"
+            style={{ opacity: "0.6" }}
+          >
             <h4 className="alert-heading">Warning!</h4>
             <p className="mb-0">No City Name Found.</p>
           </div>

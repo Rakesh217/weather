@@ -1,4 +1,7 @@
 import React from "react";
+import insta from "./insta.png";
+import facebook from "./facebook.png";
+import twitter from "./twitter.png";
 
 export default function About() {
   return (
@@ -11,7 +14,19 @@ export default function About() {
         hail, snow, and lots more..
       </p>
       <hr class="my-4" />
-      <p>For support contact : wtfweather@gmail.com</p>
+      <p>Contact Info: wtfweather@gmail.com</p>
+      <p>
+        Follow us on:
+        <button>
+          <img src={insta} />
+        </button>
+        <button>
+          <img src={facebook} />
+        </button>
+        <button>
+          <img src={twitter} />
+        </button>
+      </p>
     </div>
   );
 }
